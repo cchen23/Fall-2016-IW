@@ -21,34 +21,33 @@ def get_account_names(info_file):
     return info[:,ACCOUNT_COL]
 
 def get_statuses(username):
+    print 'Retrieving info for {}'.format(username)
     RATE_LIMIT_CODE = 88
     tweepy_api = authorize()
     statuses = []
     count = 200;
-    try:
-	    new_tweets = tweepy_api.user_timeline(screen_name=username, count=count, include_rts=True)
-    except tweepy.TweepError as e:
-        print 'Error {}.'.format(e)
-        print 'Currently at {} statuses'.format(len(statuses))
-        if (hasattr(e.message[0], 'code') and e.message[0]['code'] == RATE_LIMIT_CODE):
-            print 'Rate limit error. Sleeping for 15 minutes.'
-            time.sleep(60 * 15)
-        new_tweets = tweepy_api.user_timeline(username, count=count, include_rts=True)
-    while(len(new_tweets) > 0):
+    first_set = True
+    while(first_set == True or len(new_tweets) > 0):
         # print "Length of statuses", len(statuses)
         # print "New tweets", len(new_tweets)
-        statuses += new_tweets
         try:
-            max_id = (statuses[-1].id) - 1 # id of last retrieved tweet
-            new_tweets = tweepy_api.user_timeline(username, count=count, include_rts=True, max_id = max_id)
+            if first_set:
+                new_tweets = tweepy_api.user_timeline(screen_name=username, count=count, include_rts=True)
+                first_set = False
+            else:
+                max_id = (statuses[-1].id) - 1 # id of last retrieved tweet
+                new_tweets = tweepy_api.user_timeline(username, count=count, include_rts=True, max_id = max_id)
+            statuses += new_tweets
         except KeyError, e: # No more results when next_results doesn't exist
             break
-        except tweepy.TweepError as e:
+        except tweepy.RateLimitError as e:
             print 'Error {}.'.format(e)
             print 'Currently at {} statuses for account {}'.format(len(statuses), username)
-            if (hasattr(e.message[0], 'code') and e.message[0]['code'] == RATE_LIMIT_CODE):
-                print 'Rate limit error. Sleeping for 15 minutes.'
-                time.sleep(60 * 15)
+            print 'Rate limit error. Sleeping for 15 minutes. Current time: {}'.format(time.localtime())
+            time.sleep(60 * 15)
+        except Exception as e:
+            print 'Exception {}'.format(e)
+            print 'Currently at {} statuses for account {}'.format(len(statuses), username)
     return statuses
 
 def write_info(status, statusesWriter, mentionsWriter, retweetsWriter, repliesWriter, hashtagsWriter):
