@@ -84,12 +84,13 @@ def write_info_to_files(account_names, statusesWriter, mentionsWriter, retweetsW
         for status in statuses:
             write_info(status, statusesWriter, mentionsWriter, retweetsWriter, repliesWriter, hashtagsWriter)
 
-def write_all_info(statusesFileName, mentionsFileName, retweetsFileName, repliesFileName, hashtagsFileName, accountsFileName):
+def write_all_info(statusesFileName, mentionsFileName, retweetsFileName, repliesFileName, hashtagsFileName, counterFileName, accountsFileName):
     statusesFile = open(statusesFileName, 'a')
     mentionsFile = open(mentionsFileName, 'a')
     retweetsFile = open(retweetsFileName, 'a')
     repliesFile = open(repliesFileName, 'a')
     hashtagsFile = open(hashtagsFileName, 'a')
+    counterFile = open(counterFileName, 'a')
 
     account_names = get_account_names(accountsFileName)
 
@@ -98,14 +99,16 @@ def write_all_info(statusesFileName, mentionsFileName, retweetsFileName, replies
     retweetsWriter = csv.writer(retweetsFile, lineterminator='\n')
     repliesWriter =  csv.writer(repliesFile, lineterminator='\n')
     hashtagsWriter = csv.writer(hashtagsFile, lineterminator='\n')
+    counterWriter = csv.writer(counterFile, lineterminator='\n')
 
-    write_info_to_files(account_names, statusesWriter, mentionsWriter, retweetsWriter, repliesWriter, hashtagsWriter)
+    write_info_to_files(account_names, statusesWriter, mentionsWriter, retweetsWriter, repliesWriter, hashtagsWriter, counterWriter)
 
     statusesFile.close()
     mentionsFile.close()
     retweetsFile.close()
     repliesFile.close()
     hashtagsFile.close()
+    counterFile.close()
 
 # Main
 def main():
@@ -113,33 +116,41 @@ def main():
     statusesFileName = "politicians_statuses_timestamps.csv"
     mentionsFileName = "politicians_mentions_timestamps.csv"
     retweetsFileName = "politicians_retweets_timestamps.csv"
+    repliesFileName = "politicians_replies_timestamps.csv"
     hashtagsFileName = "politicians_hashtags_timestamps.csv"
+    counterFileName = "politicians_counts.csv"
     accountsFileName = "politicianslist.csv"
-    write_all_info(statusesFileName, mentionsFileName, retweetsFileName, repliesFileName, hashtagsFileName, accountsFileName)
+    write_all_info(statusesFileName, mentionsFileName, retweetsFileName, repliesFileName, hashtagsFileName, counterFileName, accountsFileName)
 
     # Senators
     statusesFileName = "senators_statuses_timestamps.csv"
     mentionsFileName = "senators_mentions_timestamps.csv"
     retweetsFileName = "senators_retweets_timestamps.csv"
     hashtagsFileName = "senators_hashtags_timestamps.csv"
+    repliesFileName = "senators_replies_timestamps.csv"
+    counterFileName = "senators_counts.csv"
     accountsFileName = "senatorslist.csv"
-    write_all_info(statusesFileName, mentionsFileName, retweetsFileName, repliesFileName, hashtagsFileName, accountsFileName)
+    write_all_info(statusesFileName, mentionsFileName, retweetsFileName, repliesFileName, hashtagsFileName, counterFileName, accountsFileName)
 
     # Media
     statusesFileName = "media_statuses_timestamps.csv"
     mentionsFileName = "media_mentions_timestamps.csv"
     retweetsFileName = "media_retweets_timestamps.csv"
+    repliesFileName = "media_replies_timestamps.csv"
     hashtagsFileName = "media_hashtags_timestamps.csv"
+    counterFileName = "media_counts.csv"
     accountsFileName = "medialist.csv"
-    write_all_info(statusesFileName, mentionsFileName, retweetsFileName, repliesFileName, hashtagsFileName, accountsFileName)
+    write_all_info(statusesFileName, mentionsFileName, retweetsFileName, repliesFileName, hashtagsFileName, counterFileName, accountsFileName)
 
     # Celebrities
     statusesFileName = "celebrities_statuses_timestamps.csv"
     mentionsFileName = "celebrities_mentions_timestamps.csv"
     retweetsFileName = "celebrities_retweets_timestamps.csv"
+    repliesFileName = "celebrities_replies_timestamps.csv"
     hashtagsFileName = "celebrities_hashtags_timestamps.csv"
+    counterFileName = "celebrities_counts.csv"
     accountsFileName = "celebritieslist.csv"
-    write_all_info(statusesFileName, mentionsFileName, retweetsFileName, repliesFileName, hashtagsFileName, accountsFileName)
+    write_all_info(statusesFileName, mentionsFileName, retweetsFileName, repliesFileName, hashtagsFileName, counterFileName, accountsFileName)
 
 if __name__ == "__main__":
     main()
