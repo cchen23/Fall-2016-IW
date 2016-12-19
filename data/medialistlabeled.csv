@@ -1,0 +1,101 @@
+account_name,user_name,num_following,num_followers,type
+nytimes,The New York Times ,969,30 936 311,news
+WSJ,Wall Street Journal ,1 076,11 961 330,"news, business"
+voguemagazine,Vogue Magazine ,531,11 792 438,"news, fashion"
+FoxNews,Fox News ,406,11 238 760,news
+enews,E! News ,121 824,10 328 085,"news, entertainment"
+AP,The Associated Press ,7 275,8 736 830,news
+mashable,Mashable ,2 836,7 822 855,"news, digital/entertainment"
+ABC,ABC News ,799,7 718 914,news
+TechCrunch,TechCrunch ,858,7 691 459,"news, tech"
+washingtonpost,Washington Post ,1 299,7 589 534,news
+people,People Magazine ,1 679,7 374 868,"news, entertainment"
+WIRED,WIRED ,272,7 116 434,"news, tech"
+NewYorker,The New Yorker ,377,6 801 094,news
+NPR,NPR ,72 965,6 245 878,news
+twitterapi,Twitter API ,47,6 120 169,twitter
+ELLEmagazine,ELLE Magazine ,1 106,5 992 669,"news, fashion"
+EW,Entertainment Weekly ,5 790,5 752 537,"news, entertainment"
+Discovery,Discovery ,3 340,5 688 007,tv
+cnni,CNN International ,364,5 628 045,news
+RollingStone,Rolling Stone ,257,5 279 722,"news, entertainment"
+foodandwine,Food & Wine ,699,4 970 351,life
+CBSNews,CBS News ,415,4 870 269,news
+LIFE,LIFE ,235,4 562 949,"news, photo"
+Marvel,Marvel Entertainment ,741,4 269 365,tv
+TMZ,TMZ ,911,4 245 203,"news, entertainment"
+WomensHealthMag,Women's Health ,763,4 232 499,life
+VanityFair,VANITY FAIR ,1 104,4 192 283,"news, entertainment"
+billboard,billboard ,2 891,4 128 761,"news, entertainment"
+nytimesbooks,New York Times Books ,138,4 031 507,life
+NickelodeonTV,Nickelodeon ,2 489,3 978 544,tv
+BuzzFeed,BuzzFeed ,3 116,3 955 754,"news, entertainment"
+ESPNcricinfo,ESPNcricinfo ,151,3 943 775,sports
+NBCNews,NBC News ,2 928,3 876 084,news
+parentsmagazine,Parents Magazine ,9 306,3 764 262,life
+MensHealthMag,Men's Health Mag ,997,3 519 089,life
+lifehacker,Lifehacker ,41,3 489 963,life
+business,Bloomberg ,872,3 438 014,"news, business"
+HarvardBiz,Harvard Biz Review ,194,3 300 734,"news, business"
+goodhealth,Health ,1 395,3 197 433,life
+MarketWatch,MarketWatch ,182,3 053 908,"news, business"
+Newsweek,Newsweek ,59,3 021 471,news
+NatGeoTravel,NatGeoTravel ,234,3 017 833,life
+younghollywood,Young Hollywood ,16 857,3 009 372,"news, entertainment"
+wwd,WWD ,315,2 946 016,"news, fashion"
+nflnetwork,NFL Network ,1 985,2 762 418,sports
+NBATV,NBA TV ,685,2 707 785,sports
+USATODAY,USA TODAY ,929,2 696 144,news
+TravelLeisure,Travel + Leisure ,951,2 659 608,life
+TeenVogue,Teen Vogue ,3 004,2 656 688,"news, fashion"
+Entrepreneur,Entrepreneur ,1 405,2 640 174,"news, business"
+Univision,Univision ,3 283,2 449 479,news
+CNBC,CNBC ,991,2 435 953,news
+NatGeoPhotos,Nat Geo Photography ,325,2 391 940,life
+nprpolitics,NPR Politics ,104 394,2 368 651,news
+travelchannel,Travel Channel ,3 694,2 310 537,life
+gov,Twitter Government ,5,2 274 522,twitter
+nytimesarts,New York Times Arts ,90,2 256 794,"news, entertainment"
+PBS,PBS ,165 018,2 248 400,news
+THR,Hollywood Reporter ,2 751,2 241 497,"news, entertainment"
+latimes,Los Angeles Times ,10 710,2 232 928,news
+marieclaire,Marie Claire ,1 813,2 176 416,"news, fashion"
+WhoWhatWear,Who What Wear ,1 595,2 172 499,"news, fashion"
+FastCompany,Fast Company ,3 936,2 159 426,"news, business"
+FortuneMagazine,Fortune ,486,2 144 137,"news, business"
+weatherchannel,The Weather Channel ,6 826,2 141 398,life
+tmagazine,T Magazine ,902,2 103 141,life
+politico,POLITICO ,1 229,2 075 384,"news, politics"
+ScienceChannel,Science Channel ,6 886,2 053 438,tv
+usweekly,Us Weekly ,1 173,2 020 664,"news, entertainment"
+WIREDScience,WIRED Science ,127,1 955 397,"news, science"
+gadgetlab,WIRED Gadget Lab ,31,1 940 731,"news, tech"
+BET,BET ,1 258,1 905 469,"news, entertainment"
+Inc,Inc. ,1 694,1 893 522,"news, business"
+gameinformer,Game Informer ,128 429,1 860 001,"news, games"
+ESPNDeportes,ESPN Deportes ,437,1 831 155,sports
+BBCBusiness,BBC Business ,161,1 813 451,"news, business"
+sciam,Scientific American ,4 417,1 765 868,"news, science"
+FOXSports,FOX Sports ,1 924,1 721 963,sports
+TheNextWeb,The Next Web ?????? ,1 197,1 694 885,"news, tech business culture"
+NBAonTNT,NBA on TNT ,831,1 693 067,sports
+businessinsider,Business Insider ,162,1 653 786,"news, business"
+CNNMoney,CNNMoney ,937,1 651 999,"news, business"
+Slate,Slate ,592,1 611 624,news
+parenting,Parenting.com ,9 959,1 587 085,life
+EsquireNetwork,Esquire Network ,357,1 586 466,life
+HBO,HBO ,2 359,1 572 360,tv
+HISTORY,HISTORY ,16 994,1 550 893,tv
+nytimesworld,New York Times World ,518,1 538 066,news
+digg,Digg ,258,1 530 524,"news, aggregator"
+Cosmopolitan,Cosmopolitan ,2 059,1 514 205,life
+RealSimple,Real Simple ,1 561,1 469 468,life
+CNTraveler,Condé Nast Traveler ,46 576,1 468 814,life
+UniNoticias,Univision Noticias ,1 706,1 467 289,news
+ComedyCentral,Comedy Central ,9 401,1 461 235,tv
+ESPNStatsInfo,ESPN Stats & Info ,46,1 442 252,sports
+nbc,NBC ,986,1 433 728,news
+thehill,The Hill ,613,1 403 577,"news, politics"
+BW,Businessweek ,416,1 393 318,"news, business"
+SAI,BI Tech ,65,1 383 982,"news, tech"
+TheAtlantic,The Atlantic ,1 026,1 355 557,news
