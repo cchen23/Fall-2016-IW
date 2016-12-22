@@ -118,7 +118,7 @@ def main():
         part_labels = df['Partition']
         k = len(part_labels.unique())
         clusters_matrix = labeled_df
-        gc.draw_color_and_shapenodes_df(cmp_g, "Clustering\\Graphs\\community_{}".format(interaction_type), interaction_type, node_lists, node_labels, k, clusters_matrix)
+        gc.draw_color_and_shapenodes_df(cmp_g, "Clustering\\Graphs\\community_{}".format(interaction_type), interaction_type, node_lists, node_labels, k, clusters_matrix, weight='weight')
 
         # Spectral Clustering
         clusters_nums = [2, 3, 4]
@@ -141,12 +141,12 @@ def main():
                 name = names[i]
                 am = ams[i]
                 df = spectral_clustering(nodes, am, clusters_num)
-                labeled_df = add_types(df, c_list, m_list, p_list, "{}_{}clusters_{}_types".format(interaction_type, clusters_num, name))
+                labeled_df = add_types(df, c_list, m_list, p_list, "{}_{}clusters_{}".format(interaction_type, clusters_num, name))
                 labeled_df = add_labels(df, c_df, m_df, p_df, "{}_{}clusters_{}_labels".format(interaction_type, clusters_num, name))
                 part_labels = df['Partition']
                 k = len(part_labels.unique())
                 clusters_matrix = labeled_df
-                gc.draw_color_and_shapenodes_df(cmp_g, "Clustering\\Graphs\\spectral_{}_{}clusters_{}".format(interaction_type, k, name), interaction_type, node_lists, node_labels, k, clusters_matrix)
+                gc.draw_color_and_shapenodes_df(cmp_g, "Clustering\\Graphs\\spectral_{}_{}clusters_{}".format(interaction_type, k, name), interaction_type, node_lists, node_labels, k, clusters_matrix, weight='weight')
 
 if __name__ == "__main__":
     main()
