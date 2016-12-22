@@ -3,8 +3,9 @@ graph_creator.py
 
 Description: Creates graphs with interactions as edges and users as nodes.
 """
+from conductance import conductance_score
 import csv
-import graph_utils_sql as util
+import graph_utils as util
 import networkx as nx
 import numpy as np
 import pandas as pd
@@ -132,7 +133,7 @@ def draw_color_and_shapenodes(G, out_file, interaction_type, node_lists, node_la
 
 """ Draws an interaction graph with nodes colored according to user category and
 shaped according to cluster and writes information about clusters in csv files."""
-def draw_color_and_shapenodes_df(G, out_file, interaction_type, node_lists, node_labels, k, clusters):
+def draw_color_and_shapenodes_df(G, out_file, interaction_type, node_lists, node_labels, k, clusters, weight):
     plt.clf()
     print("********************{}********************".format(out_file))
     pos = nx.spring_layout(G)
@@ -141,7 +142,6 @@ def draw_color_and_shapenodes_df(G, out_file, interaction_type, node_lists, node
     colors = ['r', 'g', 'b', 'k', 'c', 'm', 'y', '#551a8b', '#f4a460', '#ffc0cb', '#0d254c', '#18f5c6'] # for nodes
     shapes = ['.', 'o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', '+', 'x', 'D', 'l', '_'] # for clusters
     num_lists = len(node_lists)
-
     # add other nodes to end of node_lists
     other_nodes = nodes
     for i in range(num_lists):
@@ -149,8 +149,8 @@ def draw_color_and_shapenodes_df(G, out_file, interaction_type, node_lists, node
     node_lists.append(other_nodes)
     num_lists += 1
     not_listed = nodes - set(list(clusters.User))
-    f = open("../Graphs/Clustering/Stats/Cluster_Info.csv", 'a')
-    f2 = open("../Graphs/Clustering/Stats/Cluster_Stats.csv", 'a')
+    f = open("Clustering/Cluster_Info.csv", 'a')
+    f2 = open("Clustering/Cluster_Stats.csv", 'a')
     for j in range(k):
         curr_cluster = set(list(clusters.loc[clusters.Partition == str(j), 'User']))
         for i in range(num_lists):
@@ -175,6 +175,7 @@ def draw_color_and_shapenodes_df(G, out_file, interaction_type, node_lists, node
     nx.draw_networkx_edges(G, pos, alpha=0.3, width=0.3, arrows=True)
     max_percent_sum = 0
     min_percent_sum = 0
+    conductance_sum = 0
 
     last_slash_index = out_file.rfind("\\")
     cluster_method = out_file[last_slash_index + 1:]
@@ -191,6 +192,7 @@ def draw_color_and_shapenodes_df(G, out_file, interaction_type, node_lists, node
         print("Cluster {} has {} members".format(i, len(curr_cluster)))
         cluster_subgraph = G.subgraph(curr_cluster)
         clustering_coef = nx.average_clustering(cluster_subgraph.to_undirected(), weight='weight')
+        conductance = conductance_score(G, clusters, str(i), weight=weight)
         print("Cluster clustering coefficient: {}".format(clustering_coef))
 
         for j in range(num_lists):
@@ -210,12 +212,12 @@ def draw_color_and_shapenodes_df(G, out_file, interaction_type, node_lists, node
         # Write stats to csv file
         try:
             writer = csv.writer(f, lineterminator='\n')
-            writer.writerow([cluster_method, i, clustering_coef, type_percents[0], type_percents[1], type_percents[2], type_nums[0], type_nums[1], type_nums[2]])
+            writer.writerow([cluster_method, i, conductance, clustering_coef, type_percents[0], type_percents[1], type_percents[2], type_nums[0], type_nums[1], type_nums[2]])
         finally:
             pass
         max_percent_sum += curr_max * len(curr_cluster)
         min_percent_sum += curr_min * len(curr_cluster)
-
+        conductance_sum += conductance * len(curr_cluster)
         curr_nodes = list(set(node_lists[j]).intersection(not_listed))
         nx.draw_networkx_nodes(G,pos, nodelist=curr_nodes, node_color=colors[i], node_size=15)
     cur_axes = plt.gca()
@@ -224,12 +226,13 @@ def draw_color_and_shapenodes_df(G, out_file, interaction_type, node_lists, node
     plt.savefig(out_file + "_swapped")
     avg_max_percent = max_percent_sum / (len(nodes))
     avg_min_percent = min_percent_sum / (len(nodes))
+    avg_conductance = conductance_sum / (len(nodes))
     homog_score = cluster.homogeneity_score(clusters.Type, clusters.Partition)
     comp_score = cluster.completeness_score(clusters.Type, clusters.Partition)
     v_score = cluster.v_measure_score(clusters.Type, clusters.Partition)
     try:
         writer = csv.writer(f2, lineterminator='\n')
-        writer.writerow([cluster_method, k, avg_max_percent, avg_min_percent, homog_score, comp_score, v_score])
+        writer.writerow([cluster_method, k, avg_max_percent, avg_min_percent, avg_conductance, homog_score, comp_score, v_score])
     finally:
         f.close()
         f2.close()
@@ -267,7 +270,7 @@ def attribute_info():
         add_types(cmp_g)
         print('{} Assortativity: '.format(interaction_type), nx.attribute_assortativity_coefficient(cmp_g,'type'))
         print('{} Mixing: '.format(interaction_type), nx.attribute_mixing_dict(cmp_g, 'type', normalized=True))
-    
+
 def main():
     attribute_info()
 

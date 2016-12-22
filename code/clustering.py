@@ -1,3 +1,8 @@
+"""
+clustering.py
+
+Description: Clusters actors in interaction networks using various methods.
+"""
 import community
 import csv
 import graph_creator as gc
@@ -19,25 +24,15 @@ def spectral_clustering(nodes, am, k):
     df = pd.DataFrame(data=full, columns=['User', 'Partition'])
     return df
 
-""" Return a dataframe of cluster assignments from spectral clustering a given
-set of nodes into k clusters. Clusters using an affinity matrix created by
-appending a given adjacency matrix am with its transpose (Used to cluster based
-on user vectors consisting of in- and out-going interactions). """
-def spectral_clustering_vectors(nodes, am, k):
+""" Return a numpy array of in- and out-degree vectors for each user based on
+a given adjacency matrix. """
+def am_to_vectors(nodes, am):
     num_nodes = len(nodes)
     am = am.toarray()
     X = np.empty([num_nodes, 2 * num_nodes])
     X[: , 0 : num_nodes] = am
     X[:, num_nodes : 2 * num_nodes] = np.transpose(am);
-    # fill in vectors from adjacency matrix
-    spectral = cluster.SpectralClustering(n_clusters=k, eigen_solver='arpack', affinity='cosine')
-    spectral.fit(X)
-    nodes = (np.reshape(nodes, (nodes.size, 1))).astype(str)
-    group = spectral.labels_.astype(np.int)
-    group = np.reshape(group, (group.size, 1))
-    full = np.concatenate((nodes, group), axis=1)
-    df = pd.DataFrame(data=full, columns=['User', 'Partition'])
-    return df
+    return X
 
 """ Returns dataframe of cluster assignments using the Louvain Method of
 community detection. """
@@ -63,7 +58,7 @@ def add_types(clusters_df, c_list, m_list, p_list, file_name):
             clusters_df.loc[clusters_df['User'] == user, 'Type'] = 'p'
         elif user in m_list:
             clusters_df.loc[clusters_df['User'] == user, 'Type'] = 'm'
-    clusters_df.to_csv('C:\Users\Cathy\Documents\Courses\\2016-2017\IW03\Graphs\\Clustering\\{}.csv'.format(file_name))
+    clusters_df.to_csv('Clustering\\Clusters\\{}.csv'.format(file_name))
     return clusters_df
 
 """ Given a dataframe of cluster assignments and information about each user,
@@ -92,17 +87,17 @@ def add_labels(clusters_df, c_df, m_df, p_df, file_name):
             index = m_df[m_df.User == user].index[0]
             clusters_df.loc[clusters_df['User'] == user, 'Followers'] = m_df.get_value(index, 'Followers') # m_df.loc[m_df['User'] == user, 'Followers']
             clusters_df.loc[clusters_df['User'] == user, 'Description'] = m_df.get_value(index, 'Description') # p_df.loc[p_df['User'] == user, 'Affiliation']
-    clusters_df.to_csv('C:\Users\Cathy\Documents\Courses\\2016-2017\IW03\Graphs\\Clustering\\{}_labeled.csv'.format(file_name))
+    clusters_df.to_csv('Clustering\\Clusters\\{}_labeled.csv'.format(file_name))
     return clusters_df
 
 def main():
     interaction_types = ['mentions', 'replies', 'retweets']
-    f = open("../Graphs/Clustering/Stats/Cluster_Info.csv", 'a')
-    f2 = open("../Graphs/Clustering/Stats/Cluster_Stats.csv", 'a')
+    f = open("Clustering/Cluster_Info.csv", 'a')
+    f2 = open("Clustering/Cluster_Stats.csv", 'a')
     writer = csv.writer(f2, lineterminator='\n')
-    writer.writerow(['Cluster Method', 'Num Clusters', 'Avg Max Percent', 'Avg Min Percent', 'Homogeneity Score', 'Completeness Score', 'V Score'])
+    writer.writerow(['Cluster Method', 'Num Clusters', 'Avg Max Percent', 'Avg Min Percent', 'Avg Conductance', 'Homogeneity Score', 'Completeness Score', 'V Score'])
     writer = csv.writer(f, lineterminator='\n')
-    writer.writerow(['Cluster Method', 'Cluster Num', 'Clustering Coefficient', 'Percent Celebrities', 'Percent Media', 'Percent Politicians', 'Number Celebrities', 'Number Media', 'Number Politicians'])
+    writer.writerow(['Cluster Method', 'Cluster Num', 'Conductance', 'Clustering Coefficient', 'Percent Celebrities', 'Percent Media', 'Percent Politicians', 'Number Celebrities', 'Number Media', 'Number Politicians'])
     f.close()
     f2.close()
 
@@ -123,12 +118,11 @@ def main():
         part_labels = df['Partition']
         k = len(part_labels.unique())
         clusters_matrix = labeled_df
-        gc.draw_color_and_shapenodes_df(cmp_g, "..\Graphs\\Clustering\\Graphs\\parts_graph_{}".format(interaction_type), interaction_type, node_lists, node_labels, k, clusters_matrix)
+        gc.draw_color_and_shapenodes_df(cmp_g, "Clustering\\Graphs\\community_{}".format(interaction_type), interaction_type, node_lists, node_labels, k, clusters_matrix)
 
         # Spectral Clustering
         clusters_nums = [2, 3, 4]
         nodes = np.asarray(cmp_g.nodes())
-        node_lists = [c_list, m_list, p_list]
 
         am_undir_weight = nx.adjacency_matrix(cmp_g.to_undirected(), weight='weight') # Undirected, weighted
         am_undir_unweight = nx.adjacency_matrix(cmp_g.to_undirected(), weight='None') # Undirected, unweighted
@@ -136,13 +130,14 @@ def main():
         am_dir_unweight = nx.adjacency_matrix(cmp_g, weight='None') # Outgoing, unweighted
         am_dir_unweight_trans = nx.adjacency_matrix(cmp_g, weight='None').transpose() # Incoming, unweighted
         am_dir_weight_trans = nx.adjacency_matrix(cmp_g, weight='weight').transpose() # Incoming, weighted
-        am_vectors_weight = nx.adjacency_matrix(cmp_g, weight='weight') # Vectors of in and out degrees, weighted
-        am_vectors_unweight = nx.adjacency_matrix(cmp_g, weight='None') # Vectors of in and out degrees, unweighted
+        am_vectors_weight = am_to_vectors(nodes, nx.adjacency_matrix(cmp_g, weight='weight')) # Vectors of in and out degrees, weighted
+        am_vectors_unweight = am_to_vectors(nodes, nx.adjacency_matrix(cmp_g, weight='None')) # Vectors of in and out degrees, unweighted
 
         names = ['undirected_weighted', 'undirected_unweighted', 'outgoing_weighted', 'outgoing_unweighted', 'incoming_unweighted', 'incoming_weighted', 'vectors_weighted', 'vectors_unweighted']
         ams = [am_undir_weight, am_undir_unweight, am_dir_weight, am_dir_unweight, am_dir_unweight_trans, am_dir_weight_trans, am_vectors_weight, am_vectors_unweight]
         for clusters_num in clusters_nums:
-            for i in len(names):
+            for i in range(len(names)):
+                node_lists = [c_list, m_list, p_list]
                 name = names[i]
                 am = ams[i]
                 df = spectral_clustering(nodes, am, clusters_num)
@@ -151,7 +146,7 @@ def main():
                 part_labels = df['Partition']
                 k = len(part_labels.unique())
                 clusters_matrix = labeled_df
-                gc.draw_color_and_shapenodes_df(cmp_g, "..\Graphs\\Clustering\\Graphs\\spectral_graph_{}_{}clusters_{}".format(interaction_type, k, name), interaction_type, node_lists, node_labels, k, clusters_matrix)
+                gc.draw_color_and_shapenodes_df(cmp_g, "Clustering\\Graphs\\spectral_{}_{}clusters_{}".format(interaction_type, k, name), interaction_type, node_lists, node_labels, k, clusters_matrix)
 
 if __name__ == "__main__":
     main()

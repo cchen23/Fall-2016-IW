@@ -1,6 +1,6 @@
 import csv
-import graph_creator_sql as gc
-import graph_utils_sql as util
+import graph_creator as gc
+import graph_utils as util
 import graph_utils as utils_nosql
 import pymysql.cursors
 import sys
