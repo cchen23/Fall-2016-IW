@@ -131,7 +131,7 @@ def add_types(clusters_df, c_list, m_list, p_list, file_name):
             clusters_df.loc[clusters_df['User'] == user, 'Type'] = 'p'
         elif user in m_list:
             clusters_df.loc[clusters_df['User'] == user, 'Type'] = 'm'
-    clusters_df.to_csv('Clustering\\TEST\\Clusters\\{}.csv'.format(file_name))
+    clusters_df.to_csv('Clustering\\Clusters\\{}.csv'.format(file_name))
     return clusters_df
 
 """ Given a dataframe of cluster assignments and information about each user,
@@ -160,13 +160,13 @@ def add_labels(clusters_df, c_df, m_df, p_df, file_name):
             index = m_df[m_df.User == user].index[0]
             clusters_df.loc[clusters_df['User'] == user, 'Followers'] = m_df.get_value(index, 'Followers') # m_df.loc[m_df['User'] == user, 'Followers']
             clusters_df.loc[clusters_df['User'] == user, 'Description'] = m_df.get_value(index, 'Description') # p_df.loc[p_df['User'] == user, 'Affiliation']
-    clusters_df.to_csv('Clustering\\TEST\\Clusters\\{}_labeled.csv'.format(file_name))
+    clusters_df.to_csv('Clustering\\Clusters\\{}_labeled.csv'.format(file_name))
     return clusters_df
 
 def main():
     interaction_types = ['mentions', 'replies', 'retweets']
-    f = open("Clustering/TEST/Cluster_Info.csv", 'a')
-    f2 = open("Clustering/TEST/Cluster_Stats.csv", 'a')
+    f = open("Clustering/Cluster_Info.csv", 'a')
+    f2 = open("Clustering/Cluster_Stats.csv", 'a')
     writer = csv.writer(f2, lineterminator='\n')
     writer.writerow(['Cluster Method', 'Num Clusters', 'Avg Max Percent', 'Avg Min Percent', 'Avg Conductance', 'Homogeneity Score', 'Completeness Score', 'V Score'])
     writer = csv.writer(f, lineterminator='\n')
@@ -192,14 +192,6 @@ def main():
         am_undir_unweight = nx.adjacency_matrix(cmp_g.to_undirected(), weight='None') # Undirected, unweighted
         am_dir_weight = nx.adjacency_matrix(cmp_g, weight='weight') # Outgoing, weighted
         am_dir_unweight = nx.adjacency_matrix(cmp_g, weight='None') # Outgoing, unweighted
-        # am_dir_unweight_trans = nx.adjacency_matrix(cmp_g, weight='None').transpose() # Incoming, unweighted
-        # am_dir_weight_trans = nx.adjacency_matrix(cmp_g, weight='weight').transpose() # Incoming, weighted
-        # am_vectors_weight = am_to_vectors(nodes, nx.adjacency_matrix(cmp_g, weight='weight')) # Vectors of in and out degrees, weighted
-        # am_vectors_unweight = am_to_vectors(nodes, nx.adjacency_matrix(cmp_g, weight='None')) # Vectors of in and out degrees, unweighted
-        #
-        # names = ['undirected_weighted', 'undirected_unweighted', 'outgoing_weighted', 'outgoing_unweighted', 'incoming_unweighted', 'incoming_weighted', 'vectors_weighted', 'vectors_unweighted']
-        # ams = [am_undir_weight, am_undir_unweight, am_dir_weight, am_dir_unweight, am_dir_unweight_trans, am_dir_weight_trans, am_vectors_weight, am_vectors_unweight]
-
         am_sum_weight = am_to_sum(am_dir_weight)
         am_sum_unweight = am_to_sum(am_dir_unweight)
         am_prod_weight = am_to_prod(am_dir_weight)
@@ -224,7 +216,7 @@ def main():
                 part_labels = df['Partition']
                 k = len(part_labels.unique())
                 clusters_matrix = labeled_df
-                gc.draw_color_and_shapenodes_df(cmp_g, "Clustering\\TEST\\Graphs\\spectral_{}_{}clusters_{}".format(interaction_type, k, name), interaction_type, node_lists, node_labels, k, clusters_matrix, weight='weight')
+                gc.draw_color_and_shapenodes_df(cmp_g, "Clustering\\Graphs\\spectral_{}_{}clusters_{}".format(interaction_type, k, name), interaction_type, node_lists, node_labels, k, clusters_matrix, weight='weight')
 
 if __name__ == "__main__":
     main()
