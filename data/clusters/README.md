@@ -1,0 +1,1 @@
+Cluster information from various affinity matrices. clusters.zip contains specific cluster assignments for each affinity matrix, cluster_info.csv gives information about each cluster, and cluster_stats.csv gives evaluation metrics for each type of clustering.
