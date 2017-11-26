@@ -1,2 +1,2 @@
 # Fall-2016-IW
-data and code for Fall 2016 independent work
+data, code, visualization, and written report for Fall 2016 independent work
